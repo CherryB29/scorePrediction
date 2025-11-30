@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>내일 내 시험점수는?? — 슬롯머신</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#0f1724;
+      --accent:#ffd166;
+      --accent-2:#06d6a0;
+      --glass: rgba(255,255,255,0.06);
+      --neon: 0 0 14px rgba(255, 209, 102, .35), 0 0 40px rgba(255, 209, 102, .12);
+      --size: min(520px, 92vw);
+      font-family: Inter, system-ui, -apple-system, 'Noto Sans KR', '맑은 고딕', sans-serif;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(6,22,48,.5), transparent),
+                  radial-gradient(900px 500px at 90% 80%, rgba(8,44,72,.35), transparent),
+                  var(--bg);
+      display:flex;align-items:center;justify-content:center;color:#e6eef8;
+    }
+
+    .wrap{width:var(--size);max-width:calc(100% - 20px);}
+
+    .machine{
+      background: linear-gradient(180deg,#0b1220 0%, #071028 100%);
+      border-radius:20px;padding:22px;box-shadow: 0 12px 40px rgba(2,6,23,.75), inset 0 1px 0 rgba(255,255,255,0.02);
+      display:grid;grid-template-columns: 1fr 220px;gap:18px;align-items:center;
+    }
+
+    .left{
+      padding:18px;background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:12px;box-shadow: var(--neon);
+    }
+
+    .title{font-weight:700;font-size:1.4rem;letter-spacing:-0.5px;margin:0 0 8px 0}
+    .subtitle{font-size:.92rem;color:#9fb2d8;margin:0 0 14px 0}
+
+    /* reels */
+    .reels{display:flex;gap:12px;justify-content:center;align-items:flex-end}
+    .reel{
+      width:86px;height:140px;background:linear-gradient(180deg,#0b1726 0,#031023 100%);
+      border-radius:10px;padding:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 6px 18px rgba(3,9,27,.6), inset 0 -20px 40px rgba(0,0,0,.45);
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+    }
+    .reel .window{width:100%;height:80px;overflow:hidden;display:block;position:relative}
+    .strip{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .digit{width:64px;height:64px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:var(--accent);text-shadow: 0 2px 12px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    /* lever area */
+    .controls{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .display{
+      width:100%;height:100px;background: linear-gradient(180deg,#071427,#061121);border-radius:10px;padding:12px;box-sizing:border-box;border:1px solid rgba(255,255,255,0.03);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    }
+    .bignum{font-size:2.1rem;font-weight:800;color:var(--accent-2);text-shadow: 0 6px 30px rgba(6,214,160,.06)}
+    .hint{color:#9fb2d8;font-size:.86rem}
+
+    .start-btn{background:linear-gradient(180deg,#ffd166,#ffb703);border:none;padding:12px 18px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow: 0 6px 18px rgba(255,177,3,.12), 0 2px 0 rgba(255,255,255,.06);}
+    .start-btn:active{transform:translateY(2px)}
+
+    .lever{
+      width:66px;height:140px;background:linear-gradient(180deg,#081820,#051017);border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible;
+    }
+    .stick{width:12px;height:70px;background:#1b2a3a;border-radius:12px;transform-origin:center 60px;transition:transform .2s ease}
+    .knob{width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#ffefc2,#ffd166);box-shadow:0 8px 24px rgba(0,0,0,.5), 0 0 18px rgba(255,209,102,.12)}
+
+    /* top lights */
+    .lights{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+    .light{width:12px;height:12px;border-radius:50%;background:#08202a;box-shadow:0 2px 4px rgba(0,0,0,.6)}
+    .light.on{background:var(--accent);box-shadow: 0 0 14px rgba(255,209,102,.35)}
+
+    /* confetti canvas overlay */
+    canvas{position:absolute;left:0;top:0;pointer-events:none}
+
+    /* footer */
+    footer{margin-top:14px;color:#9fb2d8;font-size:.85rem;text-align:center}
+
+    /* responsive tweaks */
+    @media (max-width:720px){
+      .machine{grid-template-columns:1fr 160px}
+      .reel{width:72px;height:120px}
+      .digit{width:54px;height:54px;font-size:1.6rem}
+      .display{height:86px}
+      .bignum{font-size:1.6rem}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="machine" role="application" aria-label="시험 점수 슬롯머신">
+      <div class="left">
+        <div class="lights" aria-hidden="true">
+          <div class="light on"></div>
+          <div class="light"></div>
+          <div class="light on"></div>
+          <div class="light"></div>
+          <div class="light on"></div>
+        </div>
+        <h1 class="title">내일 내 시험점수는??</h1>
+        <p class="subtitle">1~100 사이의 숫자를 슬롯머신으로 뽑아줘요. 애니메이션 가득!</p>
+
+        <div class="reels" id="reels">
+          <div class="reel" aria-hidden="true">
+            <div class="window"><div class="strip" id="strip-0"></div></div>
+          </div>
+          <div class="reel" aria-hidden="true">
+            <div class="window"><div class="strip" id="strip-1"></div></div>
+          </div>
+          <div class="reel" aria-hidden="true">
+            <div class="window"><div class="strip" id="strip-2"></div></div>
+          </div>
+        </div>
+
+        <p style="text-align:center;margin-top:12px;color:#9fb2d8;font-size:.9rem">원하는 만큼 돌려봐 — 각 실행은 독립적입니다.</p>
+      </div>
+
+      <div class="controls">
+        <div class="display" aria-live="polite">
+          <div class="bignum" id="finalDisplay">—</div>
+          <div class="hint">버튼을 눌러 결과 확인</div>
+        </div>
+
+        <button class="start-btn" id="spinBtn" aria-pressed="false">굴려보기!</button>
+
+        <div class="lever" id="lever" title="레버를 당기려면 버튼을 누르세요">
+          <div class="stick" id="stick"></div>
+          <div style="position:absolute;bottom:10px;" class="knob" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>만든 사람: 당신의 운세는 책임져주지 않습니다 😉</footer>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // ====== 설정 ======
+    const MIN = 1, MAX = 100;
+    const reels = [document.getElementById('strip-0'), document.getElementById('strip-1'), document.getElementById('strip-2')];
+    const spinBtn = document.getElementById('spinBtn');
+    const finalDisplay = document.getElementById('finalDisplay');
+    const leverStick = document.getElementById('stick');
+    const lights = document.querySelectorAll('.light');
+
+    // canvas confetti
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas(){canvas.width = window.innerWidth; canvas.height = window.innerHeight}
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+    // make lists of digits for reels (0-9) repeated to allow smooth spin
+    function makeDigits(){
+      // we will center on 3 digits (hundreds,tens,ones) — number will be padded to 3 digits
+      const digits = [];
+      for(let d=0; d<10; d++) digits.push(d);
+      return digits;
+    }
+
+    const digitPool = makeDigits();
+
+    // Fill strips with many cycles of digits to simulate long spin
+    function populateStrips(){
+      reels.forEach((r, idx)=>{
+        r.innerHTML = '';
+        // create many cycles
+        for(let cycle=0; cycle<12; cycle++){
+          digitPool.forEach(d=>{
+            const el = document.createElement('div'); el.className='digit'; el.textContent=d;
+            r.appendChild(el);
+          });
+        }
+        // add a final set duplicated to allow smooth scroll
+        digitPool.forEach(d=>{const el = document.createElement('div'); el.className='digit'; el.textContent=d; r.appendChild(el);});
+      });
+    }
+
+    populateStrips();
+
+    // utilities
+    function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+    function pad3(n){return String(n).padStart(3,'0')}
+
+    // animate lights blink
+    let lightTimer = 0;
+    function animateLights(t){
+      lightTimer++;
+      lights.forEach((l,i)=>{
+        if((lightTimer + i*3) % 30 < 8) l.classList.add('on'); else l.classList.remove('on');
+      });
+      requestAnimationFrame(animateLights);
+    }
+    requestAnimationFrame(animateLights);
+
+    // sound using WebAudio (simple click + ding)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function clickSound(){
+      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
+      g.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      o.connect(g); g.connect(audioCtx.destination);
+      g.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime+0.02);
+      o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.25); o.stop(audioCtx.currentTime+0.26);
+    }
+    function dingSound(){
+      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+      o.type='triangle'; o.frequency.setValueAtTime(640, audioCtx.currentTime);
+      g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      o.connect(g); g.connect(audioCtx.destination);
+      g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime+0.01);
+      o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+1.2); o.stop(audioCtx.currentTime+1.25);
+    }
+
+    // confetti particle
+    function spawnConfetti(x,y,amount=40){
+      const colors = ['#ffd166','#06d6a0','#118ab2','#ef476f'];
+      for(let i=0;i<amount;i++){
+        particles.push({x:x,y:y,vx:(Math.random()-0.5)*6,vy:Math.random()*-8-2,rot:Math.random()*360,vr:Math.random()*10-5,w:6+Math.random()*8,h:8+Math.random()*6,color:colors[Math.floor(Math.random()*colors.length)],life: 60+Math.random()*40});
+      }
+    }
+
+    function renderConfetti(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.vy += 0.35; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+        if(p.life<=0 || p.y>canvas.height+50) particles.splice(i,1);
+      }
+      requestAnimationFrame(renderConfetti);
+    }
+    requestAnimationFrame(renderConfetti);
+
+    // main spin function
+    let spinning = false;
+    async function spin(){
+      if(spinning) return; spinning=true; spinBtn.disabled=true; spinBtn.setAttribute('aria-pressed','true');
+      // resume audio context if suspended (user gesture requirement)
+      if(audioCtx.state === 'suspended') await audioCtx.resume();
+
+      // lever animation
+      leverStick.style.transform = 'rotate(35deg)';
+      setTimeout(()=>{leverStick.style.transform='rotate(0deg)';}, 900);
+
+      // determine target number
+      const target = randInt(MIN, MAX);
+      const digits = pad3(target).split('').map(Number); // [h,t,o]
+
+      // randomize spin durations for each reel
+      const baseDur = 1500; // ms
+      const delays = [randInt(0,120), randInt(140,260), randInt(260,420)];
+      const durations = [baseDur+randInt(200,600), baseDur+randInt(600,1000), baseDur+randInt(1000,1600)];
+
+      // animate each reel by translating its strip to land on target digit
+      const reelRects = reels.map((r,i)=>r.parentElement.getBoundingClientRect());
+
+      // Helper: animate a strip to show the target digit
+      function animateReel(rIdx, endDigit, duration, startDelay){
+        return new Promise((resolve)=>{
+          const strip = reels[rIdx];
+          // Each digit element height
+          const sample = strip.querySelector('.digit');
+          const dh = sample.getBoundingClientRect().height + 8; // include gap
+
+          // Find index of the final target occurrence near the end for a smooth stop
+          // We'll use the final cycle's position: cycles=12, digits per cycle=10
+          const digitsPerCycle = 10;
+          const cycles = 12;
+          const targetIndex = cycles*digitsPerCycle + endDigit; // land on this element
+
+          const finalY = -(targetIndex * dh) + (strip.parentElement.getBoundingClientRect().height/2 - dh/2);
+
+          // start at random offset so it looks dynamic
+          const startOffsetIndex = randInt(0, digitsPerCycle*3);
+          const startY = -(startOffsetIndex * dh) + (strip.parentElement.getBoundingClientRect().height/2 - dh/2);
+          strip.style.transition = 'none'; strip.style.transform = `translateY(${startY}px)`;
+
+          // small tick sounds during spin
+          let tickInt = setInterval(()=>{clickSound();}, 120);
+
+          // then transition to finalY
+          setTimeout(()=>{
+            strip.style.transition = `transform ${duration}ms cubic-bezier(.12,.9,.22,1)`;
+            strip.style.transform = `translateY(${finalY}px)`;
+            // stop ticks shortly before finish
+            setTimeout(()=>{clearInterval(tickInt);}, Math.max(0, duration-250));
+            // resolve after animation ends
+            setTimeout(()=>{strip.style.transition='none'; resolve();}, duration+40);
+          }, startDelay);
+        });
+      }
+
+      // run reels in parallel, with staggered delays
+      await Promise.all([
+        animateReel(0, digits[0], durations[0], delays[0]),
+        animateReel(1, digits[1], durations[1], delays[1]),
+        animateReel(2, digits[2], durations[2], delays[2])
+      ]);
+
+      // combine digits to number
+      const shown = Number(digits.join(''));
+      // If result is 000 -> treat as 100, if >100 cap at 100. This makes distribution slightly non-uniform but fun.
+      const finalScore = shown === 0 ? 100 : Math.min(shown,100);
+
+      finalDisplay.textContent = finalScore;
+      finalDisplay.style.opacity=0; finalDisplay.style.transform='translateY(6px)';
+      setTimeout(()=>{finalDisplay.style.transition='all 420ms cubic-bezier(.2,.9,.2,1)'; finalDisplay.style.opacity=1; finalDisplay.style.transform='translateY(0)';},40);
+
+      // celebratory sound + confetti
+      dingSound();
+      const rect = finalDisplay.getBoundingClientRect();
+      spawnConfetti(rect.left + rect.width/2, rect.top + rect.height/2, 80);
+
+      // small glow pulse
+      finalDisplay.animate([{boxShadow:'0 0 0 rgba(0,0,0,0)'},{boxShadow: '0 0 36px rgba(6,214,160,0.14)'}],{duration:900,iterations:1});
+
+      // update UI
+      spinning=false; spinBtn.disabled=false; spinBtn.setAttribute('aria-pressed','false');
+    }
+
+    // wire button
+    spinBtn.addEventListener('click', ()=>{ if(!spinning) spin(); });
+
+    // keyboard support (space)
+    window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault(); spinBtn.click(); } });
+
+    // initialize display
+    finalDisplay.textContent='—';
+
+    // initial gentle wobble animation for strips (idle)
+    setInterval(()=>{
+      reels.forEach((s,i)=>{
+        s.parentElement.style.transform = `translateY(${(i%2?1:-1)*2}px)`;
+        setTimeout(()=>{s.parentElement.style.transform='translateY(0)';}, 350);
+      });
+    }, 1800+Math.random()*800);
+
+  </script>
+</body>
+</html>
