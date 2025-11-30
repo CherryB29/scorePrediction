@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>내일 내 시험점수는?? — 슬롯머신</title>
+  <title>내 시험점수는??</title>
   <style>
     :root{
       --bg:#0b1020;
@@ -27,44 +27,61 @@
     .wrap{width:var(--size);max-width:calc(100% - 20px);}
 
     .machine{
-      background: linear-gradient(180deg,#0b1220 0%, #071028 100%);
-      border-radius:20px;padding:22px;box-shadow: 0 12px 40px rgba(2,6,23,.75), inset 0 1px 0 rgba(255,255,255,0.02);
-      display:grid;grid-template-columns: 1fr 220px;gap:18px;align-items:center;
+      background: linear-gradient(180deg,#071227 0%, #081826 100%);
+      border-radius:20px;padding:22px;box-shadow: 0 20px 60px rgba(2,6,23,.75), inset 0 1px 0 rgba(255,255,255,0.02);
+      display:grid;grid-template-columns: 1fr 220px;gap:20px;align-items:start;justify-items:stretch;
+      max-width:920px;margin:0 auto;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px);
     }
 
     .left{
       padding:18px;background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border-radius:12px;box-shadow: var(--neon);
+      border-radius:12px;box-shadow: var(--neon);width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:8px;
     }
 
     .title{font-weight:700;font-size:1.4rem;letter-spacing:-0.5px;margin:0 0 8px 0}
     .subtitle{font-size:.92rem;color:#9fb2d8;margin:0 0 14px 0}
 
     /* reels */
-    .reels{display:flex;gap:12px;justify-content:center;align-items:flex-end}
+    .reels{display:flex;gap:14px;justify-content:center;align-items:flex-end;margin:10px 0}
     .reel{
-      width:86px;height:140px;background:linear-gradient(180deg,#0b1726 0,#031023 100%);
-      border-radius:10px;padding:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 6px 18px rgba(3,9,27,.6), inset 0 -20px 40px rgba(0,0,0,.45);
+      width:92px;height:156px;background:linear-gradient(180deg,#071827 0,#021421 100%);
+      border-radius:12px;padding:12px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 12px 28px rgba(3,9,27,.6), inset 0 -28px 48px rgba(0,0,0,.5);
       display:flex;align-items:center;justify-content:center;flex-direction:column;
     }
     .reel .window{width:100%;height:80px;overflow:hidden;display:block;position:relative}
-    .strip{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;}
-    .digit{width:64px;height:64px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:var(--accent);text-shadow: 0 2px 12px rgba(0,0,0,.6);
-      border:1px solid rgba(255,255,255,0.03);
+    .strip{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:10px;}
+    .digit{width:70px;height:70px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:900;color:var(--accent-2);text-shadow: 0 4px 18px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,0.035);
     }
 
-    /* lever area */
-    .controls{display:flex;flex-direction:column;align-items:center;gap:14px}
+    /* controls area */
+    .controls{display:flex;flex-direction:column;align-items:center;gap:14px;width:220px;box-sizing:border-box}
     .display{
-      width:100%;height:100px;background: linear-gradient(180deg,#071427,#061121);border-radius:10px;padding:12px;box-sizing:border-box;border:1px solid rgba(255,255,255,0.03);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+      width:100%;height:120px;background: linear-gradient(180deg,#041826,#05222b);border-radius:14px;padding:16px;box-sizing:border-box;border:1px solid rgba(255,255,255,0.04);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;backdrop-filter: blur(4px);
     }
-    .bignum{font-size:2.1rem;font-weight:800;color:var(--accent-2);text-shadow: 0 6px 30px rgba(6,214,160,.06)}
+    .bignum{font-size:3.2rem;font-weight:900;color:var(--accent-2);text-shadow: 0 12px 44px rgba(6,214,160,.12);letter-spacing:-0.6px}
     .hint{color:#9fb2d8;font-size:.86rem}
 
-    .start-btn{background:linear-gradient(180deg,#ffd166,#ffb703);border:none;padding:12px 18px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow: 0 6px 18px rgba(255,177,3,.12), 0 2px 0 rgba(255,255,255,.06);}
+    /* improved visuals */
+    .start-btn{transition:transform .12s ease, box-shadow .18s ease;padding:14px 22px;border-radius:14px;min-width:180px;font-size:1rem}
+    .start-btn:hover{transform:translateY(-4px);box-shadow:0 26px 48px rgba(255,177,3,.16)}
+    .start-btn:focus{outline:3px solid rgba(255,209,102,0.14);outline-offset:4px}
+
+    /* share button removed */
+
+    .digit{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--accent-2); box-shadow: inset 0 -10px 28px rgba(0,0,0,0.55);font-variant-numeric: tabular-nums}
+
+    .display{box-shadow: 0 10px 30px rgba(2,6,23,.6)}
+
+    @media (prefers-reduced-motion: reduce){
+      .start-btn, .stick, .strip { transition: none !important; animation: none !important }
+      canvas{display:none}
+    }
+
+    .start-btn{background:linear-gradient(180deg,#ffd166,#ffb703);border:none;font-weight:800;cursor:pointer;box-shadow: 0 6px 18px rgba(255,177,3,.12), 0 2px 0 rgba(255,255,255,.06);}
     .start-btn:active{transform:translateY(2px)}
 
     .lever{
@@ -73,8 +90,8 @@
     .stick{width:12px;height:70px;background:#1b2a3a;border-radius:12px;transform-origin:center 60px;transition:transform .2s ease}
     .knob{width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#ffefc2,#ffd166);box-shadow:0 8px 24px rgba(0,0,0,.5), 0 0 18px rgba(255,209,102,.12)}
 
-    /* top lights */
-    .lights{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+    /* top lights (hidden for a cleaner layout) */
+    .lights{display:none}
     .light{width:12px;height:12px;border-radius:50%;background:#08202a;box-shadow:0 2px 4px rgba(0,0,0,.6)}
     .light.on{background:var(--accent);box-shadow: 0 0 14px rgba(255,209,102,.35)}
 
@@ -86,7 +103,7 @@
 
     /* responsive tweaks */
     @media (max-width:720px){
-      .machine{grid-template-columns:1fr 160px}
+      .machine{grid-template-columns:1fr}
       .reel{width:72px;height:120px}
       .digit{width:54px;height:54px;font-size:1.6rem}
       .display{height:86px}
@@ -97,7 +114,7 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="machine" role="application" aria-label="시험 점수 슬롯머신">
+    <div class="machine" role="application" aria-label="시험 점수 예측">
       <div class="left">
         <div class="lights" aria-hidden="true">
           <div class="light on"></div>
@@ -106,8 +123,7 @@
           <div class="light"></div>
           <div class="light on"></div>
         </div>
-        <h1 class="title">내일 내 시험점수는??</h1>
-        <p class="subtitle">1~100 사이의 숫자를 슬롯머신으로 뽑아줘요. 애니메이션 가득!</p>
+        <h1 class="title"> 내일 내 시험점수는??</h1>
 
         <div class="reels" id="reels">
           <div class="reel" aria-hidden="true">
@@ -120,8 +136,6 @@
             <div class="window"><div class="strip" id="strip-2"></div></div>
           </div>
         </div>
-
-        <p style="text-align:center;margin-top:12px;color:#9fb2d8;font-size:.9rem">원하는 만큼 돌려봐 — 각 실행은 독립적입니다.</p>
       </div>
 
       <div class="controls">
@@ -130,7 +144,7 @@
           <div class="hint">버튼을 눌러 결과 확인</div>
         </div>
 
-        <button class="start-btn" id="spinBtn" aria-pressed="false">굴려보기!</button>
+        <button class="start-btn" id="spinBtn" aria-pressed="false">결과 확인!</button>
 
         <div class="lever" id="lever" title="레버를 당기려면 버튼을 누르세요">
           <div class="stick" id="stick"></div>
@@ -138,8 +152,6 @@
         </div>
       </div>
     </div>
-
-    <footer>만든 사람: 당신의 운세는 책임져주지 않습니다 😉</footer>
   </div>
 
   <canvas id="confetti"></canvas>
@@ -149,6 +161,7 @@
     const MIN = 1, MAX = 100;
     const reels = [document.getElementById('strip-0'), document.getElementById('strip-1'), document.getElementById('strip-2')];
     const spinBtn = document.getElementById('spinBtn');
+    // share feature removed
     const finalDisplay = document.getElementById('finalDisplay');
     const leverStick = document.getElementById('stick');
     const lights = document.querySelectorAll('.light');
@@ -204,23 +217,62 @@
     }
     requestAnimationFrame(animateLights);
 
-    // sound using WebAudio (simple click + ding)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function clickSound(){
-      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-      o.type='sine'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
-      g.gain.setValueAtTime(0.001, audioCtx.currentTime);
-      o.connect(g); g.connect(audioCtx.destination);
-      g.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime+0.02);
-      o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.25); o.stop(audioCtx.currentTime+0.26);
+    // sound using WebAudio (improved slot-like clicks + musical ding)
+    let audioCtx = null;
+    function getAudioCtx(){ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx }
+
+    function playTone(freq, opts = {}){
+      const ctx = getAudioCtx();
+      const {time = 0, duration = 0.18, type = 'sine', gain = 0.04} = opts; // quieter default
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, ctx.currentTime + time);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime + time);
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.exponentialRampToValueAtTime(gain, ctx.currentTime + time + 0.005);
+      o.start(ctx.currentTime + time);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + time + duration);
+      o.stop(ctx.currentTime + time + duration + 0.02);
     }
+
+    // short, percussive '딱딱' clicks used during reel spin (crisper, softer)
+    function tickSound(){
+      const base = 650 + Math.random()*400;
+      playTone(base, {duration:0.036, type:'square', gain:0.028});
+      playTone(base * 1.6, {time:0.006, duration:0.036, type:'sine', gain:0.014});
+    }
+
+    // musical ding for final result (soft arpeggio)
     function dingSound(){
-      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-      o.type='triangle'; o.frequency.setValueAtTime(640, audioCtx.currentTime);
-      g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      o.connect(g); g.connect(audioCtx.destination);
-      g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime+0.01);
-      o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+1.2); o.stop(audioCtx.currentTime+1.25);
+      playTone(680, {duration:0.26, type:'triangle', gain:0.08});
+      playTone(920, {time:0.12, duration:0.32, type:'sine', gain:0.06});
+      playTone(1180, {time:0.26, duration:0.36, type:'sine', gain:0.05});
+    }
+
+    // confetti paper-rustle sound: many short high-passed noise bursts
+    function popSound(count = 6){
+      const ctx = getAudioCtx();
+      const sr = ctx.sampleRate;
+      // short noise buffer (60ms)
+      const len = Math.floor(sr * 0.06);
+      const buf = ctx.createBuffer(1, len, sr);
+      const data = buf.getChannelData(0);
+      for(let i=0;i<len;i++){
+        // decreasing amplitude to make it 'papery'
+        data[i] = (Math.random()*2 - 1) * (1 - i/len) * 0.9;
+      }
+      for(let i=0;i<count;i++){
+        const src = ctx.createBufferSource(); src.buffer = buf;
+        const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.setValueAtTime(900 + Math.random()*800, ctx.currentTime);
+        const g = ctx.createGain();
+        src.connect(hp); hp.connect(g); g.connect(ctx.destination);
+        const t = i * 0.035;
+        // short envelope
+        g.gain.setValueAtTime(0.0001, ctx.currentTime + t);
+        g.gain.linearRampToValueAtTime(0.06 * (0.6 + Math.random()*0.6), ctx.currentTime + t + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.18);
+        src.start(ctx.currentTime + t);
+        src.stop(ctx.currentTime + t + 0.2);
+      }
     }
 
     // confetti particle
@@ -250,7 +302,8 @@
     async function spin(){
       if(spinning) return; spinning=true; spinBtn.disabled=true; spinBtn.setAttribute('aria-pressed','true');
       // resume audio context if suspended (user gesture requirement)
-      if(audioCtx.state === 'suspended') await audioCtx.resume();
+      const ctx = getAudioCtx();
+      if(ctx.state === 'suspended') await ctx.resume();
 
       // lever animation
       leverStick.style.transform = 'rotate(35deg)';
@@ -266,7 +319,6 @@
       const durations = [baseDur+randInt(200,600), baseDur+randInt(600,1000), baseDur+randInt(1000,1600)];
 
       // animate each reel by translating its strip to land on target digit
-      const reelRects = reels.map((r,i)=>r.parentElement.getBoundingClientRect());
 
       // Helper: animate a strip to show the target digit
       function animateReel(rIdx, endDigit, duration, startDelay){
@@ -274,7 +326,10 @@
           const strip = reels[rIdx];
           // Each digit element height
           const sample = strip.querySelector('.digit');
-          const dh = sample.getBoundingClientRect().height + 8; // include gap
+          if(!sample){ resolve(); return; }
+          const gapStr = getComputedStyle(strip).gap || '8px';
+          const gap = parseFloat(gapStr) || 8;
+          const dh = sample.getBoundingClientRect().height + gap; // include gap
 
           // Find index of the final target occurrence near the end for a smooth stop
           // We'll use the final cycle's position: cycles=12, digits per cycle=10
@@ -289,17 +344,35 @@
           const startY = -(startOffsetIndex * dh) + (strip.parentElement.getBoundingClientRect().height/2 - dh/2);
           strip.style.transition = 'none'; strip.style.transform = `translateY(${startY}px)`;
 
-          // small tick sounds during spin
-          let tickInt = setInterval(()=>{clickSound();}, 120);
-
+          // schedule percussive, dry taps synced to the reel transition (no reverb)
           // then transition to finalY
           setTimeout(()=>{
             strip.style.transition = `transform ${duration}ms cubic-bezier(.12,.9,.22,1)`;
             strip.style.transform = `translateY(${finalY}px)`;
-            // stop ticks shortly before finish
-            setTimeout(()=>{clearInterval(tickInt);}, Math.max(0, duration-250));
+
+            // schedule crisp, dry taps that align with the transition duration
+            try{
+              const ctx = getAudioCtx();
+              const durSec = duration / 1000;
+              const ticks = Math.max(4, Math.floor(durSec * 8));
+              const interval = durSec / ticks;
+              const startOffset = 0.02; // small offset from now
+              const startTime = ctx.currentTime + startOffset;
+              for(let k=0;k<ticks;k++){
+                const t = startTime + k * interval;
+                const f = 300 + Math.random() * 220; // low 'wood' tone
+                playTone(f, {time: t - ctx.currentTime, duration:0.05, type:'triangle', gain:0.05});
+                // small high click for attack
+                playTone(f * 1.8, {time: t - ctx.currentTime + 0.004, duration:0.03, type:'sine', gain:0.02});
+              }
+              // final solid thud shortly before the end
+              const finalThudTime = startTime + durSec - 0.05;
+              const thudFreq = 160 + Math.random()*60;
+              playTone(thudFreq, {time: finalThudTime - ctx.currentTime, duration:0.08, type:'sine', gain:0.06});
+            }catch(e){}
+
             // resolve after animation ends
-            setTimeout(()=>{strip.style.transition='none'; resolve();}, duration+40);
+            setTimeout(()=>{ strip.style.transition='none'; resolve(); }, duration+40);
           }, startDelay);
         });
       }
@@ -324,6 +397,8 @@
       dingSound();
       const rect = finalDisplay.getBoundingClientRect();
       spawnConfetti(rect.left + rect.width/2, rect.top + rect.height/2, 80);
+      // soft pops when confetti appears
+      popSound(4);
 
       // small glow pulse
       finalDisplay.animate([{boxShadow:'0 0 0 rgba(0,0,0,0)'},{boxShadow: '0 0 36px rgba(6,214,160,0.14)'}],{duration:900,iterations:1});
@@ -335,19 +410,16 @@
     // wire button
     spinBtn.addEventListener('click', ()=>{ if(!spinning) spin(); });
 
+    // share / copy result
+    // share logic removed per user request
+
     // keyboard support (space)
     window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault(); spinBtn.click(); } });
 
     // initialize display
     finalDisplay.textContent='—';
 
-    // initial gentle wobble animation for strips (idle)
-    setInterval(()=>{
-      reels.forEach((s,i)=>{
-        s.parentElement.style.transform = `translateY(${(i%2?1:-1)*2}px)`;
-        setTimeout(()=>{s.parentElement.style.transform='translateY(0)';}, 350);
-      });
-    }, 1800+Math.random()*800);
+    // idle wobble removed for cleaner, stable numeric display
 
   </script>
 </body>
